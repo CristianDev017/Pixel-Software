@@ -49,6 +49,19 @@ public class SolicitudHabilidadDAO {
         return false;
     }
 
+    public SolicitudHabilidad findById(int id) {
+        String sql = "SELECT * FROM solicitudes_habilidad WHERE id = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapear(rs);
+        } catch (SQLException e) {
+            System.out.println("Error en findById solicitud habilidad: " + e);
+        }
+        return null;
+    }
+
     private SolicitudHabilidad mapear(ResultSet rs) throws SQLException {
         SolicitudHabilidad s = new SolicitudHabilidad();
         s.setId(rs.getInt("id"));
@@ -58,5 +71,9 @@ public class SolicitudHabilidadDAO {
         s.setEstado(rs.getString("estado"));
         s.setFecha(rs.getTimestamp("fecha").toLocalDateTime());
         return s;
+    }
+
+    public List<SolicitudHabilidad> findByEstado(String pendiente) {
+        return null;
     }
 }

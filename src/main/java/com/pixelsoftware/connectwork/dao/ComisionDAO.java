@@ -60,6 +60,19 @@ public class ComisionDAO {
         return -1;
     }
 
+    public Comision findById(int id) {
+        String sql = "SELECT * FROM comisiones WHERE id = ?";
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return mapear(rs);
+        } catch (SQLException e) {
+            System.out.println("Error en findById comision: " + e);
+        }
+        return null;
+    }
+
     private Comision mapear(ResultSet rs) throws SQLException {
         Comision c = new Comision();
         c.setId(rs.getInt("id"));
